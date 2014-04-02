@@ -1,0 +1,10 @@
+{
+	"lr" : {
+		"number" : "7",
+		"model" : "leaveRequest"
+	},
+	"po" : {
+		"number" : "1",
+		"model" : "purchaseOrder"
+	}
+}

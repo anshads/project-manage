@@ -1,0 +1,82 @@
+<template data-controller-name="view.Home">
+	<div data-sap-ui-type="sap.m.Page" data-title="{i18n>APP_TITLE}" class="sapMPageHideHeaderWhenShellHeader" data-enable-scrolling="false">
+		<!-- Tile Container -->
+		<div data-sap-ui-type="sap.m.TileContainer">
+			<!-- Tiles -->
+			<div data-sap-ui-aggregation="tiles">
+				<!-- Customers Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-title="{i18n>CUSTOMERS}" 
+					data-number="{number>/lr/number}"
+					class="blue"
+					data-number-unit="{i18n>CONNECTIONS}"
+					data-icon="sap-icon://collaborate"
+					data-press="leaveRequestTilePress" >
+				</div> <!-- Customers -->
+				<!-- Employee Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://employee"
+					data-title="{i18n>EMPLOYEES}" 
+					data-number="3"
+					class="orange" 
+					data-number-unit="{i18n>RESOURCES}"
+					data-press="purchaseOrderTilePress"> 
+				</div> <!-- Employee -->
+				<!-- Proposal  Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile"
+					data-icon="sap-icon://decision" 
+					data-title="{i18n>PROPOSALS}" 
+					class="red" 
+					data-number="34574.00"
+					data-number-unit="{i18n>INR}"
+					> 
+				</div> <!-- Proposal -->
+				<!-- Project Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile"
+					data-icon="sap-icon://suitcase" 
+					data-title="{i18n>PROJECTS}" 
+					class="royal_blue" 
+					data-number="14"
+					data-number-unit="{i18n>PORTFOLIOS}"
+					> 
+				</div> <!--  Project -->
+				<!-- Invoice Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile"
+					data-icon="sap-icon://print" 
+					data-title="{i18n>INVOICES}" 
+					class="indigo" 
+					data-number="34546.00"
+					data-number-unit="{i18n>INR}"
+					> 
+				</div> <!-- Invoice -->
+				<!-- Task Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://task"
+					data-title="{i18n>TASKS}" 
+					data-number="45"
+					class="green" 
+					data-number-unit="{i18n>NEW_ENTRIES}"
+					> 
+				</div> <!-- Task -->
+				<!-- Issue Tracker Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://alert"
+					data-title="{i18n>BUGS_ISSUES}" 
+					data-number="23"
+					class="darkred" 
+					data-number-unit="New Bugs"
+					> 
+				</div> <!-- Issue Tracker -->
+				<!-- Time Tracker Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://history"
+					data-title="Time Tracker" 
+					class="gray" 
+					data-number="456"
+					data-number-unit="Hours"
+					> 
+				</div> <!-- Time Tracker -->
+			</div> <!-- Tiles -->
+		</div> <!-- Tile Container -->
+	</div> <!-- Page -->
+</template>

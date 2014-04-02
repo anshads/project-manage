@@ -1,0 +1,18 @@
+{
+	"analytics" : [
+		{
+			"id" : "ANL1",
+			"title" : "Sales Order Statistics",
+			"icon" : "notes",
+			"statusText" : "+345",
+			"statusState" : "Success"
+		},
+		{
+			"id" : "ANL2",
+			"title" : "Production Statistics",
+			"icon" : "lab",
+			"statusText" : "-50",
+			"statusState" : "Error"
+		}
+	]
+}
