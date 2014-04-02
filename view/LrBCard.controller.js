@@ -54,3 +54,20 @@ Close Payment       -->
 Time Tracker 		--> id, employee_id, task_id, date, start_time, end_time, description
 -----------------------------------------------------
 Customers, Employees, Projects, Proposals, Invoices, Payments, Tasks, Issues, Log
+
+HR 
+	- Employees 
+	- Customers 
+	- Time Tracker
+
+Finance
+	- Payments 
+	- Receipts
+	- Account
+	- Proposals
+	- Invoices
+
+Services
+    - Projects 
+    - Tasks 
+    - Issues 
