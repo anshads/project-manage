@@ -1,0 +1,37 @@
+{
+	"employees" : [
+		{
+			"id": 1,
+			"emp_id": "EMP232", 
+			"name": "Sanal K", 
+			"address": "Ejipura, Bangalore", 
+			"email": "sanal.k.tvm@gmail.com", 
+			"mobile": "9876341209", 
+			"department": "Development", 
+			"designation": "Database Architect", 
+			"work_location": "Bangalore"
+		},
+		{
+			"id": 2,
+			"emp_id": "EMP233", 
+			"name": "Raheem", 
+			"address": "Koramangala, Bangalore", 
+			"email": "raheem@gmail.com", 
+			"mobile": "98763543209", 
+			"department": "Networking", 
+			"designation": "Server Administrator", 
+			"work_location": "Hyderabad"
+		},
+		{
+			"id": 3,
+			"emp_id": "EMP234", 
+			"name": "Sabu", 
+			"address": "Banshankari, Bangalore", 
+			"email": "sabu@gmail.com", 
+			"mobile": "9821341209", 
+			"department": "Development", 
+			"designation": "Developer", 
+			"work_location": "Bangalore"
+		}
+	]
+}

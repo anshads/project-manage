@@ -11,7 +11,7 @@ sap.ui.jsview("view.App", {
 		
 		// create app control
 		this.shell = new sap.m.Shell("Shell", {
-			title : "My Inbox",
+			title : "Project Manage",
 			showLogout : false,
 			homeIcon : {
 				'phone' : 'img/home/57_iPhone_Desktop_Launch.png',
@@ -23,25 +23,25 @@ sap.ui.jsview("view.App", {
 			}
 		});
 		this.app = new sap.m.App("App");
-		this.splitAppLr = new sap.m.SplitContainer("SplitAppLr");
+		//this.splitAppLr = new sap.m.SplitContainer("SplitAppLr");
 		
 		// add only the home page. all others pages are lazy loaded
-		this.app.addPage(sap.ui.htmlview("Home", "view.Home"));
-		this.app.addPage(this.splitAppLr);
-		this.splitAppLr.addMasterPage(sap.ui.htmlview("LrMaster", "view.LrMaster"));
+		this.app.addPage(sap.ui.xmlview("Home", "view.Home"));
+		//this.app.addPage(this.splitAppLr);
+		//this.splitAppLr.addMasterPage(sap.ui.htmlview("LrMaster", "view.LrMaster"));
 //		this.splitAppLr.addDetailPage(sap.ui.htmlview("LrEmpty", "view.LrEmpty"));
-		this.splitAppLr.addDetailPage(sap.ui.htmlview("LrDetail", "view.LrDetail"));
+		//this.splitAppLr.addDetailPage(sap.ui.htmlview("LrDetail", "view.LrDetail"));
 		
 		//purchase order app
-		this.splitAppPo = new sap.m.SplitContainer("SplitAppPo");
+		/*this.splitAppPo = new sap.m.SplitContainer("SplitAppPo");
 		// add only the home page. all others pages are lazy loaded
 		this.app.addPage(this.splitAppPo);
 		this.splitAppPo.addMasterPage(sap.ui.htmlview("PoMaster", "view.PoMaster"));
-		this.splitAppPo.addDetailPage(sap.ui.htmlview("PoDetail", "view.PoDetail"));
+		this.splitAppPo.addDetailPage(sap.ui.htmlview("PoDetail", "view.PoDetail"));*/
 
-		this.splitAppAnalytics = new sap.m.SplitContainer("SplitAppAnalytics");
+		/*this.splitAppAnalytics = new sap.m.SplitContainer("SplitAppAnalytics");
 		this.app.addPage(this.splitAppAnalytics);
-		this.splitAppAnalytics.addMasterPage(sap.ui.htmlview("AnalyticsMaster", "view.AnalyticsMaster"));
+		this.splitAppAnalytics.addMasterPage(sap.ui.htmlview("AnalyticsMaster", "view.AnalyticsMaster"));*/
 		
 		this.shell.setApp(this.app);
 		

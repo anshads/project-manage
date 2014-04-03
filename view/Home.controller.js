@@ -1,27 +1,30 @@
 sap.ui.controller("view.Home", {
 
+	// Init Home
 	onInit : function() {
 	},
-	
-	leaveRequestTilePress : function(evt) {
+
+	// HR tile Press
+	hrTilePress: function(evt) {
 		var bus = sap.ui.getCore().getEventBus();
-		var data;
-		bus.publish("nav", "to", { 
-			id : "SplitAppLr"
-		});
-	},
-	
-	purchaseOrderTilePress : function(evt) {
-		var bus = sap.ui.getCore().getEventBus();
-		bus.publish("nav", "to", { 
-			id : "SplitAppPo"
+		bus.publish("nav", "to", {
+			id : "HrHome"
 		});
 	},
 
-	analyticsTilePress: function(evt) {
+	// Services tile Press
+	operationsTilePress: function(evt) {
 		var bus = sap.ui.getCore().getEventBus();
 		bus.publish("nav", "to", {
-			id : "SplitAppAnalytics"
+			id : "OperationsHome"
+		});
+	},
+
+	// Finance Tile Press
+	financeTilePress: function(evt) {
+		var bus = sap.ui.getCore().getEventBus();
+		bus.publish("nav", "to", {
+			id : "FinanceHome"
 		});
 	}
 });

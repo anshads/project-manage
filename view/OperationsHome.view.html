@@ -1,0 +1,43 @@
+<template data-controller-name="view.OperationsHome">
+	<div data-sap-ui-type="sap.m.Page" data-title="{i18n>APP_TITLE}" class="sapMPageHideHeaderWhenShellHeader" data-enable-scrolling="false">
+		<!-- Tile Container -->
+		<div data-sap-ui-type="sap.m.TileContainer">
+			<!-- Tiles -->
+			<div data-sap-ui-aggregation="tiles">
+				<!-- Back to Home Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://home"
+					data-title="{i18n>BACK_HOME}" 
+					class="green" 
+					data-press="homeTilePress"
+					> 
+				</div> <!-- Back to Home -->
+				<!-- Projects Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile"
+					data-icon="sap-icon://suitcase" 
+					data-title="{i18n>PROJECTS}" 
+					class="blue" 
+					> 
+				</div> <!-- Projects -->
+				<!-- Tasks Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://task"
+					data-title="{i18n>TASKS}" 
+					data-number="3"
+					class="orange" 
+					data-number-unit="{i18n>NEW_ENTRIES}"
+					> 
+				</div> <!-- Tasks -->
+				<!-- Issue Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://alert"
+					data-title="{i18n>BUGS_ISSUES}" 
+					data-number="14"
+					class="darkred" 
+					data-number-unit="{i18n>NEW_ENTRIES}"
+					> 
+				</div> <!-- Issue -->
+			</div> <!-- Tiles -->
+		</div> <!-- Tile Container -->
+	</div> <!-- Page -->
+</template>

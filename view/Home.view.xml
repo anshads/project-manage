@@ -1,0 +1,39 @@
+<mvc:View 
+	controllerName="view.Home" 
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<!-- Page -->
+	<Page
+		title="{i18n>APP_TITLE}"
+		enableScrolling="false"
+		class="sapMPageHideHeaderWhenShellHeader">
+		<!-- Tile Container -->
+		<TileContainer>
+			<!-- Standard Tile : HR -->
+			<StandardTile
+						title="{i18n>HR}" 
+						number="234"
+						class="blue"
+						numberUnit="{i18n>EMPLOYEES}"
+						icon="sap-icon://employee"
+						press="hrTilePress">
+			</StandardTile> <!-- Standard Tile : HR -->  
+			<!-- Standard Tile : Services -->
+			<StandardTile
+						title="{i18n>OPERATIONS}" 
+						class="indigo"
+						icon="sap-icon://activity-2"
+						press="operationsTilePress">
+			</StandardTile> <!-- Standard Tile : Services -->
+			<!-- Standard Tile : Finance -->
+			<StandardTile
+						title="{i18n>FINANCE}" 
+						class="orange"
+						icon="sap-icon://loan"
+						press="financeTilePress">
+			</StandardTile> <!-- Standard Tile : Finance -->                        
+		</TileContainer> <!-- Tile Container -->
+	</Page> <!-- Page -->
+</mvc:View>

@@ -1,0 +1,59 @@
+<mvc:View
+	controllerName="view.HrHome"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<!-- Page -->
+	<Page
+		title="{i18n>APP_TITLE}"
+		enableScrolling="false"
+		class="sapMPageHideHeaderWhenShellHeader">
+		<!-- Tile Container -->
+		<TileContainer>
+			<!-- Standard Tile : Back to Home -->
+			<StandardTile
+				title="{i18n>BACK_HOME}" 
+				class="green"
+				icon="sap-icon://home"
+				press="homeTilePress">
+			</StandardTile> <!-- Standard Tile : Back to Home -->  
+			<!-- Standard Tile : Employees -->
+			<StandardTile
+				title="{i18n>OPERATIONS}" 
+				class="blue"
+				number="234"
+				numberUnit="{i18n>RESOURCES}"
+				icon="sap-icon://employee"
+				press="employeeTilePress">
+			</StandardTile> <!-- Standard Tile : Employees -->
+			<!-- Standard Tile : Leave Requests -->
+			<StandardTile
+				icon="sap-icon://inbox"
+				title="{i18n>LEAVE_REQUESTS}" 
+				number="3"
+				class="orange" 
+				numberUnit="{i18n>NEW_ENTRIES}"
+				press="lrRequestTilePress">
+			</StandardTile> <!-- Standard Tile : Leave Requests --> 
+			<!-- Standard Tile : Customers -->
+			<StandardTile
+				icon="sap-icon://collaborate"
+				title="{i18n>CUSTOMERS}" 
+				number="234"
+				class="royal_blue" 
+				numberUnit="{i18n>CONNECTIONS}"
+				press="customerTilePress">
+			</StandardTile> <!-- Standard Tile : Customers -->    
+			<!-- Standard Tile : Time Tracker -->
+			<StandardTile
+				icon="sap-icon://history"
+				title="{i18n>TIME_TRACKER}" 
+				class="gray" 
+				number="456"
+				numberUnit="{i18n>HOURS}"
+				press="trTilePress">
+			</StandardTile> <!-- Standard Tile : Time Tracker -->                      
+		</TileContainer> <!-- Tile Container -->
+	</Page> <!-- Page -->
+</mvc:View>

@@ -1,0 +1,54 @@
+<template data-controller-name="view.FinanceHome">
+	<div data-sap-ui-type="sap.m.Page" data-title="{i18n>APP_TITLE}" class="sapMPageHideHeaderWhenShellHeader" data-enable-scrolling="false">
+		<!-- Tile Container -->
+		<div data-sap-ui-type="sap.m.TileContainer">
+			<!-- Tiles -->
+			<div data-sap-ui-aggregation="tiles">
+				<!-- Back to Home Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://home"
+					data-title="{i18n>BACK_HOME}" 
+					class="green" 
+					data-press="homeTilePress"
+					> 
+				</div> <!-- Back to Home -->
+				<!-- Payments Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile"
+					data-icon="sap-icon://simple-payment" 
+					data-title="{i18n>PAYMENTS}" 
+					class="orange" 
+					data-number="23432"
+					data-number-unit="{i18n>INR}"
+					> 
+				</div> <!-- Payments -->
+				<!-- Receipts Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://money-bills"
+					data-title="{i18n>RECEIPTS}" 
+					data-number="3343434"
+					class="blue" 
+					data-number-unit="{i18n>INR}"
+					> 
+				</div> <!-- Receipts -->
+				<!-- Accounts Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://collections-management"
+					data-title="{i18n>ACCOUNTS}" 
+					data-number="+2323423"
+					class="gray" 
+					data-number-unit="{i18n>INR}"
+					> 
+				</div> <!-- Accounts -->
+				<!-- Invoices Tile -->
+				<div data-sap-ui-type="sap.m.StandardTile" 
+					data-icon="sap-icon://print"
+					data-title="{i18n>INVOICES}" 
+					class="royal_blue" 
+					data-number="4"
+					data-number-unit="{i18n>DUE}"
+					> 
+				</div> <!-- Invoices -->
+			</div> <!-- Tiles -->
+		</div> <!-- Tile Container -->
+	</div> <!-- Page -->
+</template>

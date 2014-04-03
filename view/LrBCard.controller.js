@@ -57,6 +57,7 @@ Customers, Employees, Projects, Proposals, Invoices, Payments, Tasks, Issues, Lo
 
 HR 
 	- Employees 
+	- Leave Requests
 	- Customers 
 	- Time Tracker
 

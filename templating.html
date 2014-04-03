@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Template - sap.ui.core.tmpl</title>
+
+    <script id="sap-ui-bootstrap"
+            type="text/javascript"
+            src="../../../../../resources/sap-ui-core.js"
+            data-sap-ui-libs="sap.ui.commons"
+            data-sap-ui-theme="sap_bluecrystal"
+            data-sap-ui-xx-bindingSyntax="complex"
+            >
+    </script>
+    
+    <script>
+    
+        // sample code
+        jQuery(function() {
+            
+            // define the model
+            var oModel = new sap.ui.model.json.JSONModel({
+                title: "Persons",
+                persons: [{
+                    firstName: "Peter",
+                    lastName: "Muessig"
+                }, {
+                    firstName: "Tim",
+                    lastName: "Back"
+                }, {
+                    firstName: "Christoph",
+                    lastName: "Kraemer"
+                }]
+            });
+            sap.ui.getCore().setModel(oModel);
+            
+            // register all available templates in the document
+            sap.ui.template();
+            
+        });
+    
+    </script>
+
+</head>
+<body class="sapUiBody" role="application">
+
+    <div id="mySimpleTemplate" data-type="text/x-handlebars-template">
+    
+        <h3>Text Template (using "text" expression)</h3>
+        <b>{{text path="/title"}}:</b>
+        <ul>
+        {{#each path="/persons"}}
+            <li>{{text path="firstName"}} {{text path="lastName"}}</li>
+        {{/each}}
+        </ul>
+    
+    </div>
+
+    <div id="myAdvancedTemplate" data-type="text/x-handlebars-template">
+    
+        <h3>Advanced Text Template (using "element" expression)</h3>
+        {{element tag="b" text="{/title}"}}:
+        <ul>
+        {{#each path="/persons"}}
+            {{element tag="li" text="{firstName} {lastName}"}}
+        {{/each}}
+        </ul>
+    
+    </div>
+
+    <div id="myAdvancedEditTemplate" data-type="text/x-handlebars-template">
+    
+        <h3>Advanced Text Template (using editable "element" expression)</h3>
+        {{element tag="textarea" text="{/title}" rows="2" cols="40"}}
+        <ul>
+        {{#each path="/persons"}}
+            <li>{{element tag="input" value="{firstName}"}} {{element tag="input" value="{lastName}"}}</li>
+        {{/each}}
+        </ul>
+    
+    </div>
+
+    <div id="myControlTemplate" data-type="text/x-handlebars-template">
+    
+        <h3>Control Template (using "control" expression)</h3>
+        {{control sap-ui-type="sap.ui.commons.Label" design="Bold" text="{/title}"}}
+        <ul>
+        {{#each path="/persons"}}
+            <li>{{control sap-ui-type="sap.ui.commons.TextView" text="{lastName}, {firstName}"}}</li>
+        {{/each}}
+        </ul>
+    
+    </div>
+
+    <div id="myControlEditTemplate" data-type="text/x-handlebars-template">
+    
+        <h3>Advanced Control Template (using editable "control" expression)</h3>
+        {{control sap-ui-type="sap.ui.commons.TextArea" value="{/title}" rows="2" cols="40"}}
+        <ul>
+        {{#each path="/persons"}}
+            <li>{{control sap-ui-type="sap.ui.commons.TextField" value="{lastName}"}}, {{control sap-ui-type="sap.ui.commons.TextField" value="{firstName}"}}</li>
+        {{/each}}
+        </ul>
+    
+    </div>
+
+</body>
+</html>

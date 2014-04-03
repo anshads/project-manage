@@ -9,14 +9,20 @@ sap.ui.controller("view.App", {
 		Home : 			{ type : undefined, 	app : "App",		master : undefined }, 
 		SplitAppLr :	{ type : undefined, 	app : "App",		master : undefined },
 		SplitAppPo :	{ type : undefined, 	app : "App",		master : undefined },
-		SplitAppAnalytics :	{ type : undefined, 	app : "App",		master : undefined },
+		AnalyticsMaster:{ type : "HTML", 	app : "App",		master : undefined, view:"view.AnalyticsMaster" },
 		LrMaster : 		{ type : "HTML", 		app : "SplitAppLr",	master : true },
 		LrDetail : 		{ type : "HTML", 		app : "SplitAppLr",	master : false },
 		LrCalendar :	{ type : "HTML", 		app : "SplitAppLr",	master : false },
 		LrBCard :		{ type : "HTML", 		app : "SplitAppLr",	master : false },
-		PoMaster : 		{ type : "HTML", 		app : "SplitAppPo",	master : true },
+		PoMaster : 		{ type : "HTML", 		app : "SplitAppPo",	master : true, view:"view.PoMaster" },
 		PoDetail : 		{ type : "HTML", 		app : "SplitAppPo",	master : false },
-		PoCalendar :	{ type : "HTML", 		app : "SplitAppPo",	master : false }
+		PoCalendar :	{ type : "HTML", 		app : "SplitAppPo",	master : false },
+		HrHome : 		{ type : "XML", 		app : "App", 		master: undefined, view: "view.HrHome"},
+		OperationsHome: { type : "HTML", 		app : "App", 		master: undefined, view: "view.OperationsHome"},
+		FinanceHome :   { type : "HTML", 		app : "App", 		master: undefined, view: "view.FinanceHome"},
+		SplitAppEmp :	{ type : "split", 		app : "App",		master : undefined },
+		LrMaster : 		{ type : "HTML", 		app : "SplitAppEmp",	master : true, view:"view.EmpMaster" },
+        LrDetail : 		{ type : "HTML", 		app : "SplitAppEmp",	master : false, view:"view.LrDetail"  },
 	},
 	
 	getDefaultPage : function() {
@@ -50,7 +56,7 @@ sap.ui.controller("view.App", {
 	},
 	
 	isRootInApp: function(pageId) {
-		return pageId === "SplitAppLr" || pageId === "SplitAppPo";
+		return pageId === "SplitAppEmp" || pageId === "SplitAppPo" || pageId === "PoMaster" || pageId === "HrHome";
 	},
 	
 	writeToHistory : function(pageId) {
@@ -163,16 +169,42 @@ sap.ui.controller("view.App", {
 		if(currentPage.getId() === id){
 			//navigating to the same page as the current page, then only update the data
 			updateDataOnly = true;
+
+
 		}
 		
 		if (page === null) {
 			var type = this.getViewType(id);
 			var name = this.getViewName(id);
-			var page = sap.ui.view({
+
+
+            var page=null;
+
+            if (type==="split")
+            {
+              page= new sap.m.SplitContainer(id);
+
+                var that=this.PAGE;
+                $.each(this.PAGE, function( key, value ) {
+
+                    if (value.app===id){
+                        if (value.master==true) {
+                        page.addMasterPage(sap.ui.htmlview(key,that[key].view));
+                        }
+                        else
+                        {
+                          page.addDetailPage(sap.ui.htmlview(key,that[key].view));
+                        }
+                    }
+                });
+            }
+            else {
+			page = sap.ui.view({
 				id : id,
-				viewName : name,
+				viewName : this.PAGE[id].view,
 				type : type
 			});
+            }
 			
 			app.addPage(page, master);
 			jQuery.sap.log.info("app controller > loaded page: " + id);

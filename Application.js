@@ -12,6 +12,9 @@ sap.ui.app.Application.extend("Application", {
 		var numberModel = new sap.ui.model.json.JSONModel("model/number.json");
 		var analyticsModel = new sap.ui.model.json.JSONModel("model/analytics.json");
 
+		var employeesModel = new sap.ui.model.json.JSONModel("model/employees.json");
+		sap.ui.getCore().setModel(employeesModel, "emp");
+
 		//For internationlization purpose
 		var oMyResourceModel = new sap.ui.model.resource.ResourceModel({ bundleUrl: "i18n/i18n.properties", bundleLocale: "en_US" });
 		sap.ui.getCore().setModel(oMyResourceModel, "i18n");
