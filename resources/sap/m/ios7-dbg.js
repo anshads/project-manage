@@ -54,7 +54,7 @@ jQuery.sap.declare("sap.m._Ios7");
 	/**
 	 * gets the height of the navigation bar in px. Only returns a number < 0 in landscape mode - will return 0 for portrait mode or if no navigation bar is shown.
 	 * @internal
-	 * @returns {integer} the height of the navigation bar
+	 * @returns {int} the height of the navigation bar
 	 */
 	sap.m._Ios7.prototype.getNavigationBarHeight = function () {
 		if(!this._bNavigationBarEventFired) {
@@ -167,9 +167,8 @@ jQuery.sap.declare("sap.m._Ios7");
 	/**
 	 * @private handles the orientation change
 	 */
-	sap.m._Ios7.prototype._onOrientationChange = function () {
-		//TODO: use oEvent.landscape but currently it is bugged for ios 7
-		var bIsLandscape = window.orientation === 90 || window.orientation === -90;
+	sap.m._Ios7.prototype._onOrientationChange = function (oEvent) {
+		var bIsLandscape = oEvent.landscape;
 
 		window.scrollTo(0,0);
 

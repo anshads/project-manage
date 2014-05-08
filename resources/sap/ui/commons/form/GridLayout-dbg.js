@@ -57,7 +57,7 @@ jQuery.sap.require("sap.ui.layout.form.GridLayout");
  * @extends sap.ui.layout.form.GridLayout
  *
  * @author SAP AG 
- * @version 1.18.10
+ * @version 1.20.4
  *
  * @constructor   
  * @public

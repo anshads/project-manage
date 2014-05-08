@@ -61,7 +61,7 @@ jQuery.sap.require("sap.ui.core.TooltipBase");
  * @extends sap.ui.core.TooltipBase
  *
  * @author SAP AG 
- * @version 1.18.10
+ * @version 1.20.4
  *
  * @constructor   
  * @public
@@ -247,6 +247,7 @@ sap.ui.commons.RichTooltip.prototype.setValueStateText = function(sText) {
 			}).addStyleClass("sapUiRttValueStateText").addStyleClass("individual");
 
 			this.setAggregation("individualStateText", oValueStateText);
+			this.setProperty("valueStateText", sText, true);
 		}
 	} else {
 		if (oValueStateText) {
@@ -293,6 +294,8 @@ sap.ui.commons.RichTooltip.prototype.setText = function(sText) {
 			htmlText : sText
 		}).addStyleClass("sapUiRttText");
 		this.setAggregation("formattedText", oText);
+		oText.setProperty("htmlText", sText, true); 
+		 this.setProperty("text", sText, true);
 	}
 };
 
@@ -325,7 +328,7 @@ sap.ui.commons.RichTooltip.prototype.onfocusin = function(oEvent) {
 			sIds += sId + "-title ";
 		}
 
-		var $valueStateText = jQuery.sap.byId(sId + "-valueStateText");
+		var $valueStateText = this.$("valueStateText");
 		if ($valueStateText.length > 0) {
 			sIds += sId + "-valueStateText ";
 		}

@@ -75,7 +75,7 @@ jQuery.sap.require("sap.ui.core.Control");
  * @extends sap.ui.core.Control
  *
  * @author  
- * @version 1.18.10
+ * @version 1.20.4
  *
  * @constructor   
  * @public
@@ -608,7 +608,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -690,7 +690,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -762,7 +762,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -820,7 +820,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -878,7 +878,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -936,7 +936,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -994,7 +994,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -1064,7 +1064,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -1146,7 +1146,7 @@ sap.m.SplitContainer.M_EVENTS = {'masterNavigate':'masterNavigate','afterMasterN
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.SplitContainer</code>.<br/> itself.
  *
  * @return {sap.m.SplitContainer} <code>this</code> to allow method chaining
  * @public
@@ -1674,15 +1674,10 @@ sap.m.SplitContainer.prototype.init = function() {
 		
 		this.setAggregation("_navMaster", this._oMasterNav, true);
 		this.setAggregation("_navDetail", this._oDetailNav, true);
-		
+
 		//initialize the navigation button
-		this._oShowMasterBtn = new sap.m.Button(this.getId() + "-MasterBtn", {
-			text: (sap.ui.Device.os.ios && this._isPlatformDependent) ? this._rb.getText("SPLITCONTAINER_NAVBUTTON_TEXT") : "",
-			icon: !this._isPlatformDependent ? sap.ui.core.IconPool.getIconURI("menu2") : "",
-			type: (sap.ui.Device.os.ios || !this._isPlatformDependent) ? sap.m.ButtonType.Default : sap.m.ButtonType.Up,
-			press: jQuery.proxy(this._onMasterButtonTap, this)
-		}).addStyleClass("sapMSplitContainerMasterBtn"); 
-		
+		this._createShowMasterButton();
+
 		//initialize the popover
 		this._oPopOver = new sap.m.Popover(this.getId() + "-Popover", {
 			placement: sap.m.PlacementType.Bottom,
@@ -1794,8 +1789,8 @@ sap.m.SplitContainer.prototype.ontouchstart = function(oEvent){
 };
 
 sap.m.SplitContainer.prototype.onswiperight = function(oEvent) {
-	//only enabled on tablet, not phone and not desktop
-	if(sap.ui.Device.system.tablet 
+	//only enabled on tablet or Windows 8
+	if((sap.ui.Device.system.tablet || (sap.ui.Device.os.windows && sap.ui.Device.os.version >= 8))
 		&& (this._portraitHide() || this._hideMode()) 
 		&& !this._bIgnoreSwipe) {
 		//if event is already handled by inner control, master won't be shown.
@@ -1819,20 +1814,24 @@ sap.m.SplitContainer.prototype.ontap = function(oEvent) {
 		bIsMasterNav = false;
 	}
 
-	// when press not in MasterNav, master will be hidden
+	// when press not in MasterNav and not the showMasterButton, master will be hidden
 	// this should happen when:
 	// 1. showhidemode in portrait
 	// 2. hidemode
 	if(((!this._oldIsLandscape && this.getMode() == "ShowHideMode") || this.getMode() == "HideMode")
+			// press isn't occuring in master area
 			&& !bIsMasterNav
-			&& this._bMasterisOpen){
+			// master is open
+			&& this._bMasterisOpen
+			// press isn't triggered by the showMasterButton
+			&& !jQuery.sap.containsOrEquals(this._oShowMasterBtn.getDomRef(), oEvent.target)){
 		this.hideMaster();
 	}
 };
 
 sap.m.SplitContainer.prototype.onswipeleft = function(oEvent) {
-	//only enabled on tablet, not phone and not desktop
-	if(sap.ui.Device.system.tablet 
+	//only enabled on tablet or Windows 8
+	if((sap.ui.Device.system.tablet || (sap.ui.Device.os.windows && sap.ui.Device.os.version >= 8)) 
 		&& (this._portraitHide() || this._hideMode()) 
 		&& !this._bIgnoreSwipe) {
 		this.hideMaster();
@@ -1860,13 +1859,13 @@ sap.m.SplitContainer.prototype._onMasterButtonTap = function(oEvent){
 		}
 	}
 };
-/**************************************************************
-* End - Touch Event Handlers
-**************************************************************/
+//**************************************************************
+//* End - Touch Event Handlers
+//**************************************************************
 
-/**************************************************************
-* START - Public methods
-**************************************************************/
+//**************************************************************
+//* START - Public methods
+//**************************************************************
 
 sap.m.SplitContainer.prototype.to = function(pageId, transitionName, data, oTransitionParameters) {
 	if (this._oMasterNav.getPage(pageId)) {
@@ -2244,13 +2243,13 @@ sap.m.SplitContainer.prototype.isMasterShown = function(){
 	}
 };
 
-/**************************************************************
-* END - Public methods
-**************************************************************/
+//**************************************************************
+//* END - Public methods
+//**************************************************************
 
-/*************************************************************
- * START - Setters/Getters of the SplitContainer control
-**************************************************************/
+//**************************************************************
+//* START - Setters/Getters of the SplitContainer control
+//**************************************************************
 sap.m.SplitContainer.prototype.setInitialMaster = function(sPage) {
 	this._oMasterNav.setInitialPage(sPage);
 	this.setAssociation('initialMaster', sPage, true);
@@ -2363,7 +2362,7 @@ sap.m.SplitContainer.prototype.setBackgroundOpacity = function(fOpacity) {
 		jQuery.sap.log.warning("Invalid value " + fOpacity + " for SplitContainer.setBackgroundOpacity() ignored. Valid values are: floats between 0 and 1.");
 		return this;;
 	}
-	jQuery.sap.byId(this.getId() + "-BG").css("opacity", fOpacity);
+	this.$("BG").css("opacity", fOpacity);
 	return this.setProperty("backgroundOpacity", fOpacity, true); // no rerendering - live opacity change looks cooler
 };
 
@@ -2559,7 +2558,7 @@ sap.m.SplitContainer.prototype._updateMasterPosition = function(sPos) {
 	if(sPos == "popover") {
 		//remove the NavContainer dom from the left side without rerendering the whole app
 		this.removeAggregation("_navMaster", this._oMasterNav, true);
-		jQuery.sap.byId(this._oMasterNav.getId()).remove();
+		this._oMasterNav.$().remove();
 		this._oPopOver.addContent(this._oMasterNav);
 		this._bMasterisOpen = false;
 	}
@@ -2568,7 +2567,7 @@ sap.m.SplitContainer.prototype._updateMasterPosition = function(sPos) {
 			that._oPopOver.removeAggregation("content", that._oMasterNav, false);
 			that.setAggregation("_navMaster", that._oMasterNav, true);
 			//render only the master navContainer, to prevent the whole app from rerendering
-			var $master = jQuery.sap.byId(that.getId());
+			var $master = that.$();
 			if ($master[0]) {
 				var rm = sap.ui.getCore().createRenderManager();
 				rm.renderControl(that._oMasterNav.addStyleClass("sapMSplitContainerMaster"));
@@ -2614,6 +2613,19 @@ sap.m.SplitContainer.prototype._hideMode = function() {
 	return this.getMode() === "HideMode" && !sap.ui.Device.system.phone;
 };
 
+sap.m.SplitContainer.prototype._createShowMasterButton = function() {
+	if (this._oShowMasterBtn && !this._oShowMasterBtn.bIsDestroyed) {
+		return;
+	}
+
+	this._oShowMasterBtn = new sap.m.Button(this.getId() + "-MasterBtn", {
+		text: (sap.ui.Device.os.ios && this._isPlatformDependent) ? this._rb.getText("SPLITCONTAINER_NAVBUTTON_TEXT") : "",
+		icon: !this._isPlatformDependent ? sap.ui.core.IconPool.getIconURI("menu2") : "",
+		type: (sap.ui.Device.os.ios || !this._isPlatformDependent) ? sap.m.ButtonType.Default : sap.m.ButtonType.Up,
+		press: jQuery.proxy(this._onMasterButtonTap, this)
+	}).addStyleClass("sapMSplitContainerMasterBtn");
+};
+
 sap.m.SplitContainer.prototype._setMasterButton = function(oPage, fnCallBack) {
 	if(!oPage){
 		return;
@@ -2642,11 +2654,17 @@ sap.m.SplitContainer.prototype._setMasterButton = function(oPage, fnCallBack) {
 			}
 		}
 		if(!bIsSet) {
+			// showMasterBtn could have already be destroyed by destroying the customHeader of the previous page
+			// When this is the case, showMasterBtn will be instantiated again
+			this._createShowMasterButton();
+
 			this._oShowMasterBtn.removeStyleClass("sapMSplitContainerMasterBtnHidden");
+
 			if(!sap.ui.Device.os.ios && sIcon && this._isPlatformDependent){
 				sap.ui.getCore().byId(oPage.getId() + "-icon").addStyleClass("sapMSplitContainerHiddenChild");
 				this._oShowMasterBtn.setIcon(sIcon);
 			}
+
 			if(oPageHeader){
 				//if the header is empty in android, the title index has to be 1 since the back button needs to be the first item in the header
 				if(!sap.ui.Device.os.ios && this._isPlatformDependent && oContentLeft.length === 0) {

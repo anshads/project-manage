@@ -61,7 +61,7 @@ jQuery.sap.require("sap.ui.core.Control");
  * @extends sap.ui.core.Control
  *
  * @author SAP AG 
- * @version 1.18.10
+ * @version 1.20.4
  *
  * @constructor   
  * @public
@@ -442,7 +442,7 @@ sap.m.IconTabBar.M_EVENTS = {'select':'select','expand':'expand'};
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.IconTabBar</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.IconTabBar</code>.<br/> itself.
  *
  * @return {sap.m.IconTabBar} <code>this</code> to allow method chaining
  * @public
@@ -511,7 +511,7 @@ sap.m.IconTabBar.M_EVENTS = {'select':'select','expand':'expand'};
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.IconTabBar</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.IconTabBar</code>.<br/> itself.
  *
  * @return {sap.m.IconTabBar} <code>this</code> to allow method chaining
  * @public
@@ -581,14 +581,13 @@ sap.m.IconTabBar.prototype.init = function() {
 	this._oItemNavigation = new sap.ui.core.delegate.ItemNavigation().setCycling(false);
 	this.addDelegate(this._oItemNavigation);
 
-	if (sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop) {
-
+	if (!sap.ui.Device.system.desktop || (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8)) {
 		jQuery.sap.require("sap.ui.core.delegate.ScrollEnablement");
 		this._oScroller = new sap.ui.core.delegate.ScrollEnablement(this, this.getId() + "-head", {
 			horizontal: true,
 			vertical: false,
 			zynga: false,
-			iscroll: true,
+			iscroll: "force",
 			preventDefault: false,
 			nonTouchScrolling: "scrollbar"
 		});
@@ -606,18 +605,18 @@ sap.m.IconTabBar.prototype.exit = function() {
 	if (this._oArrowRight) {
 		this._oArrowRight.destroy();
 	}
-	
+
 	if (this._oItemNavigation) {
 		this.removeDelegate(this._oItemNavigation);
 		this._oItemNavigation.destroy();
 		delete this._oItemNavigation;
 	}
-	
+
 	if (this._oScroller){
 		this._oScroller.destroy();
 		this._oScroller = null;
 	}
-	
+
 	if (this._sResizeListenerId) {
 		sap.ui.core.ResizeHandler.deregister(this._sResizeListenerId);
 		this._sResizeListenerId = null;
@@ -662,6 +661,17 @@ sap.m.IconTabBar.prototype.onBeforeRendering = function() {
 				}
 			}
 		}
+
+		//in case the selected tab is not visible anymore and the content is expanded, the selected tab will change to the first visible tab
+		if (this.oSelectedItem && !this.oSelectedItem.getVisible() && this.getExpanded()) {
+			for (i = 0; i < aItems.length; i++) { // tab item
+				if (!(aItems[i] instanceof sap.m.IconTabSeparator) && aItems[i].getVisible()) {
+					this.oSelectedItem = aItems[i];
+					break;
+				}
+			}
+		}
+
 		if (this.oSelectedItem) {
 			this.setProperty("selectedKey", this.oSelectedItem.getKey(), true);
 		}
@@ -752,15 +762,6 @@ sap.m.IconTabBar.prototype.setSelectedItem = function(oItem, bAPIchange) {
 			}
 		//click on other item leads to showing the right content of this item
 		} else {
-			if ($content.length > 0) {
-				$content.empty();
-			}
-
-			// remove old item from tab chain
-			if(this.oSelectedItem) {
-				this.oSelectedItem.$().attr("tabindex",-1);
-			}
-
 			// set new item
 			this.oSelectedItem = oItem;
 			this.setProperty("selectedKey", this.oSelectedItem.getKey(), true);
@@ -768,11 +769,6 @@ sap.m.IconTabBar.prototype.setSelectedItem = function(oItem, bAPIchange) {
 			// add selected styles
 			this.oSelectedItem.$().addClass("sapMITBSelected");
 
-			// put new into tab chain and focus 
-			this.oSelectedItem.$().attr("tabindex",0);
-			this.oSelectedItem.$().focus();
-			this._oFocusedItem = this.oSelectedItem;
-	
 			//if item has own content, this content is shown
 			var oSelectedItemContent = this.oSelectedItem.getContent();
 			if (oSelectedItemContent.length > 0) {
@@ -814,7 +810,7 @@ sap.m.IconTabBar.prototype.setSelectedItem = function(oItem, bAPIchange) {
 /**
  * Rerenders only shown content of the IconTabBar.
  * @private
- * @param oContent content which should be rendered.<
+ * @param oContent content which should be rendered.
  */
 sap.m.IconTabBar.prototype._rerenderContent = function(oContent) {
 	var $content = this.$("content");
@@ -848,12 +844,13 @@ sap.m.IconTabBar.prototype._adjustArrow = function(){
 				if (this._bRtl){
 					var iPossibleLeft = $head[0].offsetLeft;
 					var iPossibleRight = document.width - iPossibleLeft - $arrow.width() / 2;
+					var iRight = 0;
 					var oDomRef = this.getDomRef("head");
 					var iScrollRight = jQuery(oDomRef).scrollRightRTL();
 					if (this.oSelectedItem.getDesign() === sap.m.IconTabFilterDesign.Vertical) {
-						var iRight = $arrow.parent().width() - $item[0].offsetLeft - $arrow.width() / 2 - $item.outerWidth() / 2 - $head[0].offsetLeft - iScrollRight;
+						iRight = $arrow.parent().width() - $item[0].offsetLeft - $arrow.width() / 2 - $item.outerWidth() / 2 - $head[0].offsetLeft - iScrollRight;
 					} else { //horizontal layout needs different arrow calculation
-						var iRight = $arrow.parent().width() - $item[0].offsetLeft - $arrow.width() / 2 - $item.outerWidth() + this.oSelectedItem.$("tab").outerWidth() / 2 - $head[0].offsetLeft - iScrollRight;
+						iRight = $arrow.parent().width() - $item[0].offsetLeft - $arrow.width() / 2 - $item.outerWidth() + this.oSelectedItem.$("tab").outerWidth() / 2 - $head[0].offsetLeft - iScrollRight;
 					}
 					if (this._oScroller) {
 						iRight += this._oScroller.getScrollLeft();
@@ -869,25 +866,27 @@ sap.m.IconTabBar.prototype._adjustArrow = function(){
 					var iPossibleLeft = $head[0].offsetLeft;
 					var iPossibleRight = document.width - iPossibleLeft - $arrow.width() / 2;
 					var oDomRef = this.getDomRef("head");
+					var iLeft = 0;
 					var iScrollLeft = oDomRef.scrollLeft;
 					if (this.oSelectedItem.getDesign() === sap.m.IconTabFilterDesign.Vertical) {
-						var iLeft = $item[0].offsetLeft + $item.outerWidth() / 2 - $arrow.width() / 2 + $head[0].offsetLeft - iScrollLeft;
+						iLeft = $item[0].offsetLeft + $item.outerWidth() / 2 - $arrow.width() / 2 + $head[0].offsetLeft - iScrollLeft;
 					} else { //horizontal layout needs different arrow calculation
-						var iLeft = $item[0].offsetLeft + this.oSelectedItem.$("tab").outerWidth() / 2- $arrow.width() / 2 + $head[0].offsetLeft - iScrollLeft;
+						iLeft = $item[0].offsetLeft + this.oSelectedItem.$("tab").outerWidth() / 2- $arrow.width() / 2 + $head[0].offsetLeft - iScrollLeft;
 					}
 					if (this._oScroller) {
 						iLeft -= this._oScroller.getScrollLeft();
 					}
 					var aItems = this.getItems();
-					if (((this.$("head").hasClass("sapMITBNoText") || this.oSelectedItem.$().hasClass("sapMITBHorizontal")) && ((this.oSelectedItem === aItems[0])))
-							|| ((aItems.length > 0) && (this.oSelectedItem === aItems[aItems.length-1])) && !jQuery.device.is.desktop && !this.oSelectedItem.$().hasClass("sapMITBHorizontal")) {
+					var oFirstVisibleItem = this._getFirstVisibleItem(aItems);
+					if (((this.$("head").hasClass("sapMITBNoText") || this.oSelectedItem.$().hasClass("sapMITBHorizontal")) && ((this.oSelectedItem === oFirstVisibleItem)))
+							|| ((aItems.length > 0) && (this.oSelectedItem === aItems[aItems.length-1])) && (!sap.ui.Device.system.desktop || sap.ui.Device.os.windows && sap.ui.Device.os.version === 8) && !this.oSelectedItem.$().hasClass("sapMITBHorizontal")) {
 						//first tab has less padding, last tab has more padding arrow would not point to the middle
 						iLeft -= 8;
 					}
 					if (this.oSelectedItem.$().hasClass("sapMITBHorizontal")) {
 						iLeft += 8;
 					}
-					if (!jQuery.device.is.desktop && !this.$("head").hasClass("sapMITBNoText")) {
+					if ( (!sap.ui.Device.system.desktop || sap.ui.Device.os.windows && sap.ui.Device.os.version === 8) && !this.$("head").hasClass("sapMITBNoText")) {
 						if (this.oSelectedItem === aItems[0]) {
 							iLeft -= 2;
 						} else if (this.oSelectedItem === aItems[aItems.length-1]) {
@@ -902,14 +901,23 @@ sap.m.IconTabBar.prototype._adjustArrow = function(){
 };
 
 /**
+ * return first visible item, which is needed for correct arrow calculation
+ */
+sap.m.IconTabBar.prototype._getFirstVisibleItem = function(aItems) {
+	for (var i = 0; i < aItems.length; i++) {
+		if (aItems[i].getVisible()) {
+			return aItems[i];
+		}
+	}
+	
+	return null;
+};
+
+/**
  * afterRendering
  */
 sap.m.IconTabBar.prototype.onAfterRendering = function() {
-	var that = this,
-		i = 0,
-		aItems = this.getItems(),
-		$tabItem,
-		oHeadDomRef = this.getDomRef("head"),
+	var oHeadDomRef = this.getDomRef("head"),
 		$bar = this.$();
 
 	// initialize scrolling
@@ -921,14 +929,12 @@ sap.m.IconTabBar.prototype.onAfterRendering = function() {
 		this.oSelectedItem.$().addClass("sapMITBSelected");
 	}
 
-	if (sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop) {
+	if (!sap.ui.Device.system.desktop || (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8)) {
 		jQuery.sap.delayedCall(350, this, "_checkOverflow", [oHeadDomRef, $bar]);
-	} else {
-		this._checkOverflowIntervalId = jQuery.sap.intervalCall(350, this, "_checkOverflow", [oHeadDomRef, $bar]);
 	}
 
 	// reset scroll state after re-rendering for non-touch devices (iScroll will handle this internally)
-	if (this._iCurrentScrollLeft !== 0 && !(sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop)) {
+	if (this._iCurrentScrollLeft !== 0 && (sap.ui.Device.system.desktop && !(sap.ui.Device.os.windows && sap.ui.Device.os.version === 8))) {
 		oHeadDomRef.scrollLeft = this._iCurrentScrollLeft;
 	}
 
@@ -943,22 +949,35 @@ sap.m.IconTabBar.prototype.onAfterRendering = function() {
 		}
 	}
 
+	//use ItemNavigation for keyboardHandling
+	var aItems = this.getItems();
+	var aTabDomRefs = [];
+	var iSelectedDomIndex = -1;
+	var that = this;
 
-	// set tabindex on selected / first item
-	if (this.oSelectedItem && this.oSelectedItem.getVisible()) {
-		$tabItem = this.oSelectedItem.$(); 
-	} else {
-		// get first visible item
-		for (; i < aItems.length; i++) { // tab item
-			if (!(aItems[i] instanceof sap.m.IconTabSeparator) && aItems[i].getVisible()) {
-				$tabItem = aItems[i].$();
-				break;
+	// find a collection of all tabs
+	aItems.forEach(function(oItem) {
+		if (oItem instanceof sap.m.IconTabFilter) {
+			var oItemDomRef = that.getFocusDomRef(oItem);
+			jQuery(oItemDomRef).attr("tabindex", "-1");
+			aTabDomRefs.push(oItemDomRef);
+			if (that === this.oSelectedItem) {
+				iSelectedDomIndex = aTabDomRefs.indexOf(oItem);
 			}
 		}
+	});
+
+	//Initialize the ItemNavigation
+	if (!this._oItemNavigation) {
+		this._oItemNavigation = new sap.ui.core.delegate.ItemNavigation();
+		this.addDelegate(this._oItemNavigation);
 	}
-	if ($tabItem !== undefined) {
-		$tabItem.attr("tabindex", 0);
-	}
+
+	//Reinitialize the ItemNavigation after rendering
+	this._oItemNavigation.setRootDomRef(oHeadDomRef);
+	this._oItemNavigation.setItemDomRefs(aTabDomRefs);
+	this._oItemNavigation.setSelectedIndex(iSelectedDomIndex);
+
 
 	//listen to resize
 	this._sResizeListenerId = sap.ui.core.ResizeHandler.register(this.getDomRef(),  jQuery.proxy(this._fnResize, this));
@@ -1017,8 +1036,6 @@ sap.m.IconTabBar.prototype.removeItem = function(oItem) {
 	return oItem;
 };
 
-//add, remove, removeall, insert
-
 /**
  * Called after the theme has been switched, required for new width calc
  * @private
@@ -1041,7 +1058,7 @@ sap.m.IconTabBar.prototype.onTransitionEnded = function(bExpanded) {
 
 	// if multiple animations are triggered, this function is executed multiple times in the end, so we need to ignore all except the last call
 	if (this._iAnimationCounter === 1) {
-		this.$("containerContent").toggleClass("sapMITBContentClosed", !bExpanded);
+		$container.toggleClass("sapMITBContentClosed", !bExpanded);
 		if (bExpanded) { // expanding
 			$arrow.show();
 			$content.css("display", "block");
@@ -1118,11 +1135,13 @@ sap.m.IconTabBar.prototype._checkTextOnly = function(aItems) {
 		for (var i = 0; i < aItems.length; i++) {
 			if (!(aItems[i] instanceof sap.m.IconTabSeparator)) {
 				if (aItems[i].getIcon()) {
+					this._bTextOnly = false;
 					return false;
 				}
 			}
 		}
 	}
+	this._bTextOnly = true;
 	return true;
 };
 
@@ -1152,7 +1171,7 @@ sap.m.IconTabBar.prototype._checkNoText = function(aItems) {
 sap.m.IconTabBar.prototype._checkScrolling = function(oHead, $bar) {
 	var bScrolling = false;
 
-	if (sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop) { //iScroll is used, therefore we need other calculation then in desktop mode
+	if (!sap.ui.Device.system.desktop || (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8)) { //iScroll is used, therefore we need other calculation then in desktop mode
 		var domScrollCont = this.getDomRef("scrollContainer");
 		var domHead = this.getDomRef("head");
 		if (domHead.offsetWidth > domScrollCont.offsetWidth) {
@@ -1219,7 +1238,7 @@ sap.m.IconTabBar.prototype._checkOverflow = function(oBarHead, $bar) {
 		var bScrollBack = false;
 		var bScrollForward = false;
 
-		if (sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop) { //iScroll is used, therefore we need other calculation then in desktop mode
+		if (!sap.ui.Device.system.desktop || (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8)) { //iScroll is used, therefore we need other calculation then in desktop mode
 			var domScrollCont = this.getDomRef("scrollContainer");
 			var domHead = this.getDomRef("head");
 			if (this._oScroller.getScrollLeft() > 0) {
@@ -1288,24 +1307,57 @@ sap.m.IconTabBar.prototype._handleActivation = function(oEvent) {
 			// For scroll buttons: Prevent IE from firing beforeunload event -> see CSN 4378288 2012
 			oEvent.preventDefault();
 
+			//on mobile devices click on arrows has no effect
+			if (sTargetId == sId + "-arrowScrollLeft" && sap.ui.Device.system.desktop) {
+				if (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8) {
+					//combi devices with windows 8 should also scroll on click on arrows
+					//need to use iscroll
+					var iScrollLeft = this._oScroller.getScrollLeft() - sap.m.IconTabBar.SCROLL_STEP;
+					if (iScrollLeft < 0) {
+						iScrollLeft = 0;
+					}
+					// execute manual scrolling with iScroll's scrollTo method (delayedCall 0 is needed for positioning glitch)
+					this._scrollPreparation();
+					jQuery.sap.delayedCall(0, this._oScroller, "scrollTo", [iScrollLeft, 0, 500]);
+					jQuery.sap.delayedCall(500, this, "_afterIscroll");
+				} else {
+					// scroll back/left button
+					this._scroll(-sap.m.IconTabBar.SCROLL_STEP, 500);
+				}
 
-			if (sTargetId == sId + "-arrowScrollLeft" && jQuery.device.is.desktop) {
-				// scroll back/left button
-				this._scroll(-sap.m.IconTabBar.SCROLL_STEP, 500);
-			} else if (sTargetId == sId + "-arrowScrollRight" && jQuery.device.is.desktop) {
-				// scroll forward/right button
-				this._scroll(sap.m.IconTabBar.SCROLL_STEP, 500);
+			} else if (sTargetId == sId + "-arrowScrollRight" && sap.ui.Device.system.desktop) {
+				if (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8) {
+					//combi devices with windows 8 should also scroll on click on arrows
+					//need to use iscroll
+					var iScrollLeft = this._oScroller.getScrollLeft() + sap.m.IconTabBar.SCROLL_STEP;
+					var iContainerWidth = this.$("scrollContainer").width();
+					var iHeadWidth = this.$("head").width();
+					if (iScrollLeft > (iHeadWidth - iContainerWidth)) {
+						iScrollLeft = iHeadWidth - iContainerWidth;
+					}
+					// execute manual scrolling with iScroll's scrollTo method (delayedCall 0 is needed for positioning glitch)
+					this._scrollPreparation();
+					jQuery.sap.delayedCall(0, this._oScroller, "scrollTo", [iScrollLeft, 0, 500]);
+					jQuery.sap.delayedCall(500, this, "_afterIscroll");
+				} else {
+					// scroll forward/right button
+					this._scroll(sap.m.IconTabBar.SCROLL_STEP, 500);
+				}
+
 			} else {
 				// should be one of the items - select it
 				if (oControl instanceof sap.ui.core.Icon) { 
 					// click on icon: fetch filter instead
 					sControlId = oEvent.srcControl.getId().replace("-icon", "");
 					oControl = sap.ui.getCore().byId(sControlId);
+					this.setSelectedItem(oControl);
 				}
 				// select item if it is an iconTab but not a separator
-				if (oControl.getMetadata().isInstanceOf("sap.m.IconTab") && !(oControl instanceof sap.m.IconTabSeparator)) {
-					oControl.focus();
-					this.setSelectedItem(oControl);
+				else if (oControl.getMetadata().isInstanceOf("sap.m.IconTab") && !(oControl instanceof sap.m.IconTabSeparator)) {
+					//for tabs with showAll property true, click on whole area leads to selection, for text only version only clicking on text itself (not count)
+					if (oControl.getShowAll() || this._bTextOnly && sTargetId === oControl.getId() + "-text") {
+						this.setSelectedItem(oControl);
+					}
 				}
 			}
 		}
@@ -1322,8 +1374,7 @@ sap.m.IconTabBar.prototype._handleActivation = function(oEvent) {
  * @return {sap.m.IconTabBar} this pointer for chaining
  */ 
 sap.m.IconTabBar.prototype._scrollIntoView = function(oItem, iDuration) {
-	var that = this,
-	$item = oItem.$(),
+	var $item = oItem.$(),
 	oHeadDomRef,
 	iScrollLeft,
 	iNewScrollLeft,
@@ -1334,7 +1385,7 @@ sap.m.IconTabBar.prototype._scrollIntoView = function(oItem, iDuration) {
 		var iItemPosLeft = $item.position().left;
 
 		// switch based on scrolling mode
-		if (sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop) { // iScroll
+		if (!sap.ui.Device.system.desktop || (sap.ui.Device.os.windows && sap.ui.Device.os.version === 8)) { // iScroll
 			iScrollLeft = this._oScroller.getScrollLeft();
 			iContainerWidth = this.$("scrollContainer").width();
 			iNewScrollLeft = 0;
@@ -1438,6 +1489,34 @@ sap.m.IconTabBar.prototype._fnResize = function() {
 	this._adjustArrow();
 };
 
+/** 
+ * @overwrite
+ */
+//overwritten method, returns for most cases the iconDomRef, if the given tab has no icon, the textDomRef is returned.
+sap.m.IconTabBar.prototype.getFocusDomRef = function (oFocusTab) {
+	
+	var oTab = oFocusTab || this.oSelectedItem;
+
+	if (!oTab) {
+		return null;
+	}
+
+	if (!this._bTextOnly) {
+		if (oTab.getShowAll()) {
+			return oTab.getDomRef();
+		}
+		return oTab.getDomRef("icon");
+	}
+	return oTab.getDomRef("text");
+};
+
+sap.m.IconTabBar.prototype.applyFocusInfo = function (oFocusInfo) {
+	//sets the focus depending on the used IconTabFilter
+	if (oFocusInfo.focusDomRef) {
+		jQuery(oFocusInfo.focusDomRef).focus();
+	}
+};
+
 /* =========================================================== */
 /*           begin: event handlers                             */
 /* =========================================================== */
@@ -1510,173 +1589,6 @@ sap.m.IconTabBar.prototype.onsapselect = function(oEvent) {
 	this._handleActivation(oEvent);
 };
 
-/**
- * Event handler for the focusin event. Stores the currently focused tab item.
- * @param {jQuery.Event} oEvent The event object
- * @private
- */
-sap.m.IconTabBar.prototype.onfocusin = function(oEvent) {
-	var oSourceDomRef = oEvent.target,
-	oFocusedItem = sap.ui.getCore().byId(oSourceDomRef.id);
-	
-	if (oFocusedItem && oFocusedItem.getMetadata().isInstanceOf("sap.m.IconTab") && !(oFocusedItem instanceof sap.m.IconTabSeparator)) {
-		this._oFocusedItem = oFocusedItem;
-	}
-};
-
-/**
- * Event handler for the focusout event. Resets the currently focused tab item.
- * @param {jQuery.Event} oEvent The event object
- * @private
- */
-sap.m.IconTabBar.prototype.onfocusout = function(oEvent) {
-	this._oFocusedItem = null;
-};
-
-
-/**
- * Keyboard navigation event when the user presses Arrow Right (Left in RTL case) or Arrow Up.
- *
- * @param {jQuery.Event} oEvent The event object
- * @private
- */
-sap.m.IconTabBar.prototype.onsapincrease = function (oEvent) {
-	var aItems = this.getItems(),
-		i = 0,
-		j;
-
-	// select next item
-	if (this._oFocusedItem) {
-		// find current tab item as i
-		for (; i < aItems.length; i++) {
-			if (aItems[i] === this._oFocusedItem) {
-				// found current i
-				// disable browser event handling
-				oEvent.stopPropagation();
-				oEvent.preventDefault();
-				break;
-			}
-		}
-		// find next visible tab item as j
-		for(j = i + 1; j < aItems.length; j++) {
-			if (!(aItems[j] instanceof sap.m.IconTabSeparator) && aItems[j].getVisible()) {
-				aItems[i].$().attr("tabindex",-1);
-				aItems[j].$().attr("tabindex",0);
-				aItems[j].$().focus();
-				this._oFocusedItem = aItems[j];
-				break;
-			}
-		}
-	}
-};
-
-/**
- * Keyboard navigation event when the user presses Arrow Right (Left in RTL case) or Arrow Up.
- *
- * @param {jQuery.Event} oEvent The event object
- * @private
- */
-sap.m.IconTabBar.prototype.onsapdecrease = function (oEvent) {
-	var aItems = this.getItems(),
-		i = aItems.length,
-		j;
-
-	// select previous item
-	if (this._oFocusedItem) {
-		// find current tab item as i
-		for (; i >= 0; i--) {
-			if (aItems[i] === this._oFocusedItem) {
-				// found current i
-				// disable browser event handling
-				oEvent.stopPropagation();
-				oEvent.preventDefault();
-				break;
-			}
-		}
-		// find previous visible tab item as j
-		for(j = i - 1; j >= 0; j--) {
-			if (!(aItems[j] instanceof sap.m.IconTabSeparator) && aItems[j].getVisible()) {
-				aItems[i].$().attr("tabindex",-1);
-				aItems[j].$().attr("tabindex",0);
-				aItems[j].$().focus();
-				this._oFocusedItem = aItems[j];
-				break;
-			}
-		}
-	}
-};
-
-/**
-* Keyboard navigation event when the user presses Home.
-*
-* @param {jQuery.Event} oEvent
-* @private
-*/
-sap.m.IconTabBar.prototype.onsaphome = function (oEvent) {
-	var aItems = this.getItems(),
-		i = aItems.length,
-		j;
-
-	// select previous item
-	if (this._oFocusedItem) {
-		// find current tab item as i
-		for (; i >= 0; i--) {
-			if (aItems[i] === this._oFocusedItem) {
-				// found current i
-				// disable browser event handling
-				oEvent.stopPropagation();
-				oEvent.preventDefault();
-				break;
-			}
-		}
-		// find first visible tab item as j
-		for(j = 0; j < i; j++) {
-			if (!(aItems[j] instanceof sap.m.IconTabSeparator) && aItems[j].getVisible()) {
-				aItems[i].$().attr("tabindex",-1);
-				aItems[j].$().attr("tabindex",0);
-				aItems[j].$().focus();
-				this._oFocusedItem = aItems[j];
-				break;
-			}
-		}
-	}
-};
-
-/**
- * Keyboard navigation event when the user presses End.
- *
- * @param {jQuery.Event} oEvent
- * @private
- */
-sap.m.IconTabBar.prototype.onsapend = function (oEvent) {
-	var aItems = this.getItems(),
-		i = 0,
-		j;
-
-	// select next item
-	if (this._oFocusedItem) {
-		// find current tab item as i
-		for (; i < aItems.length; i++) {
-			if (aItems[i] === this._oFocusedItem) {
-				// found current i
-				// disable browser event handling
-				oEvent.stopPropagation();
-				oEvent.preventDefault();
-				break;
-			}
-		}
-		// find last visible tab item as j
-		for(j = aItems.length - 1; j > i; j--) {
-			if (!(aItems[j] instanceof sap.m.IconTabSeparator) && aItems[j].getVisible()) {
-				aItems[i].$().attr("tabindex",-1);
-				aItems[j].$().attr("tabindex",0);
-				aItems[j].$().focus();
-				this._oFocusedItem = aItems[j];
-				break;
-			}
-		}
-	}
-};
 
 /* =========================================================== */
 /*           end: event handlers                               */

@@ -148,22 +148,20 @@ sap.ui.commons.TreeRenderer.renderNode = function(oRenderManager, oNode, iLevel,
 	rm.writeClasses(oNode);
 
 	//ARIA
-	rm.writeAttribute('role', 'treeitem');
-	rm.writeAttribute('aria-level', iLevel);
-	rm.writeAttribute('aria-setsize', iSize);
-	rm.writeAttribute('aria-posinset', iPos);
+	var mProps = {role: 'treeitem', level: iLevel, setsize: iSize, posinset: iPos,};
 
 	if(bExpanded){
-		rm.writeAttribute("aria-expanded", "true");
+		mProps["expanded"] = true;
 	}
 	else{
 		// don't write aria expanded attribute if a node has no children
 		// if a node has an expander we assume that it also has children
 		if (oNode.getHasExpander()) {
-			rm.writeAttribute("aria-expanded", "false");
+			mProps["expanded"] = false;
 		}
 	}
 
+	rm.writeAccessibilityState(oNode, mProps);
 
 	//Tooltip
 	rm.writeAttributeEscaped( "title", oNode.getTooltip_AsString());

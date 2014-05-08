@@ -2,6 +2,7 @@
 	controllerName="view.Home" 
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core"
+	xmlns:ca="sap.ca.ui"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:h="http://www.w3.org/1999/xhtml">
 	<!-- Page -->
@@ -33,7 +34,7 @@
 						class="orange"
 						icon="sap-icon://loan"
 						press="financeTilePress">
-			</StandardTile> <!-- Standard Tile : Finance -->                        
+			</StandardTile> <!-- Standard Tile : Finance -->                      
 		</TileContainer> <!-- Tile Container -->
 	</Page> <!-- Page -->
 </mvc:View>

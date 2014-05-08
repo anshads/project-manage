@@ -8,7 +8,8 @@
 	<Page
 		title="{i18n>APP_TITLE}"
 		enableScrolling="false"
-		class="sapMPageHideHeaderWhenShellHeader">
+		class="sapMPageHideHeaderWhenShellHeader"
+		showNavButton="true">
 		<!-- Tile Container -->
 		<TileContainer>
 			<!-- Standard Tile : Back to Home -->
@@ -20,7 +21,7 @@
 			</StandardTile> <!-- Standard Tile : Back to Home -->  
 			<!-- Standard Tile : Employees -->
 			<StandardTile
-				title="{i18n>OPERATIONS}" 
+				title="{i18n>EMPLOYEES}" 
 				class="blue"
 				number="234"
 				numberUnit="{i18n>RESOURCES}"

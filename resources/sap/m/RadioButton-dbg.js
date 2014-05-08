@@ -62,7 +62,7 @@ jQuery.sap.require("sap.ui.core.Control");
  * @extends sap.ui.core.Control
  *
  * @author SAP AG 
- * @version 1.18.10
+ * @version 1.20.4
  *
  * @constructor   
  * @public
@@ -340,7 +340,7 @@ sap.m.RadioButton.M_EVENTS = {'select':'select'};
  * @param {function}
  *            fnFunction The function to call, when the event occurs.  
  * @param {object}
- *            [oListener=this] Context object to call the event handler with. Defaults to this <code>sap.m.RadioButton</code>.<br/> itself.
+ *            [oListener] Context object to call the event handler with. Defaults to this <code>sap.m.RadioButton</code>.<br/> itself.
  *
  * @return {sap.m.RadioButton} <code>this</code> to allow method chaining
  * @public
@@ -401,29 +401,34 @@ sap.m.RadioButton.M_EVENTS = {'select':'select'};
 jQuery.sap.require("sap.ui.core.EnabledPropagator");
 sap.ui.core.EnabledPropagator.call(sap.m.RadioButton.prototype);
 
+sap.m.RadioButton.prototype.getFocusDomRef = function() {
+	return this.getDomRef("out");
+};
+
 /**
  * Function is called when radiobutton is tapped.
  *
  * @private
  */
-sap.m.RadioButton.prototype.ontap = function(oEvent) {
-	if (this.getEnabled()) {
-		if (!this.getSelected()) {
-			this.setSelected(true);
-			this.fireSelect({selected:true});
-		}
-		var that = this;
-		//Sets focus on the radiobutton when the label is clicked
-		if(oEvent.srcControl && oEvent.srcControl.getMetadata().getName() == "sap.m.Label") {
-			setTimeout(function() {
-				that.$().find(".sapMRbB").focus();
-			},0)
-		}
-	}else{
-		// readOnly or disabled -> don't allow browser to switch RadioButton on
-		//oEvent.preventDefault();
+sap.m.RadioButton.prototype.ontap = function() {
+	if (!this.getEnabled()) {
+		return;
 	}
+
+	this.$("Button").focus();
+
+	if (this.getSelected()) {
+		return;
+	}
+
+	this.setSelected(true);
+
+	var that = this;
+	setTimeout(function() {
+		that.fireSelect({selected:true});
+	}, 0);
 };
+
 /**
  * Function is called when radiobutton is being touched. Only necessary for Android/Black-Berry.
  *
@@ -489,13 +494,13 @@ sap.m.RadioButton.prototype.setSelected = function(bSelected) {
 	}
 	if ((bSelectedOld !== bSelected) && this.getDomRef()){
 
-			jQuery.sap.byId(this.getId()).toggleClass('sapMRbSel', bSelected).attr('aria-checked', bSelected);
+			this.$().toggleClass('sapMRbSel', bSelected).attr('aria-checked', bSelected);
 	if(bSelected){
-		jQuery.sap.domById(this.getId()+'-RB').checked = true;
-		jQuery.sap.domById(this.getId()+'-RB').setAttribute('checked', 'checked');
+		this.getDomRef("RB").checked = true;
+		this.getDomRef("RB").setAttribute('checked', 'checked');
 	}else{
-		jQuery.sap.domById(this.getId()+'-RB').checked = false;
-		jQuery.sap.domById(this.getId()+'-RB').removeAttribute('checked');
+		this.getDomRef("RB").checked = false;
+		this.getDomRef("RB").removeAttribute('checked');
 	}
 	}
 
@@ -548,7 +553,7 @@ sap.m.RadioButton.prototype._createLabel = function(prop, value){
 /*
  * Sets the tab index of the control
  *
- * @param {Int} iTabIndex  greater than or equal -1
+ * @param {int} iTabIndex  greater than or equal -1
  * @return {sap.m.RadioButton}
  * @since 1.16
  * @protected
@@ -557,4 +562,14 @@ sap.m.RadioButton.prototype.setTabIndex = function(iTabIndex) {
 	this._iTabIndex = iTabIndex;
 	this.$().find(".sapMRbB").attr("tabindex", iTabIndex);
 	return this;
+};
+
+sap.m.RadioButton.prototype.getFocusDomRef = function (oFocusInfo) {
+	//set the focus on the radio button wrapper
+	return this.getDomRef("Button");
+};
+
+sap.m.RadioButton.prototype.applyFocusInfo = function () {
+	//set the focus on the radio button wrapper
+	this.$("Button").focus();
 };
